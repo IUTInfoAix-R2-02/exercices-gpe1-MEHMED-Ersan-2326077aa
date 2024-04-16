@@ -1,21 +1,29 @@
 package fr.amu.iut.exercice5;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class JeuMain extends Application {
 
     private Scene scene;
     private BorderPane root;
+    ArrayList<Obstacle> obstacles;
 
     @Override
     public void start(Stage primaryStage) {
 
         root = new BorderPane();
+
+         obstacles = new ArrayList<Obstacle>();
+
+        obstacles.add(new Obstacle(40, 60, 40, 40));
 
         //Acteurs du jeu
         Personnage pacman = new Pacman();
@@ -27,6 +35,11 @@ public class JeuMain extends Application {
         jeu.setPrefSize(640, 480);
         jeu.getChildren().add(pacman);
         jeu.getChildren().add(fantome);
+        jeu.getChildren().addAll(obstacles);
+        //obstacles
+
+
+
         root.setCenter(jeu);
         //on construit une scene 640 * 480 pixels
         scene = new Scene(root);
@@ -56,13 +69,35 @@ public class JeuMain extends Application {
                 case RIGHT:
                     j1.deplacerADroite(scene.getWidth());
                     break;
+                case DOWN:
+                    j1.deplacerEnBas(scene.getHeight());
+                    break;
+                case UP:
+                    j1.deplacerEnHaut();
+                    break;
                 case Z:
-                    //j2...... vers le haut;
+                    j2.deplacerEnHaut();
+                    break;
+                case D:
+                    j2.deplacerADroite(scene.getWidth());
+                    break;
+                case Q:
+                    j2.deplacerAGauche();
+                    break;
+                case S:
+                    j2.deplacerEnBas(scene.getHeight());
                     break;
 
             }
-            if (j1.estEnCollision(j2))
-                System.out.println("Collision....");
+
+            for (Obstacle obs : obstacles) {
+                obs.handleCollision(j1);
+            }
+
+            if (j1.estEnCollision(j2)){
+                Platform.exit();
+                System.exit(0);
+            }
         });
     }
 
