@@ -4,6 +4,8 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
+
+
 public class Obstacle extends Rectangle {
     private static String BASE_BACKGRUND = "-fx-background-color: ";
     private static String COLOR_RED = "red";
